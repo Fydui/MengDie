@@ -20,7 +20,7 @@ public:
     void getWindowSize();   //获得窗口大小
     void setWindowSize(int w, int h);//设置窗口大小
     void controlAdaptive(); //
-    void setScene(Item *item); //设置item
+    void setScene(Item &item); //设置item
     bool openPackage(QString packName); //设置梦蝶工程包
     void setPrePath(QString path);      //安卓下设置预目录
     void setFixed(bool s = 1); //在固定窗口与全屏自适应之间切换 默认固定
@@ -29,7 +29,7 @@ public:
     QString titleName = "梦蝶";
     
 private:
-    void autoZoom(Item *item);    // 图元的自动缩放
+    void autoZoom(Item &item);    // 图元的自动缩放
     
 };
 

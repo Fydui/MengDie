@@ -17,6 +17,7 @@ double zoomVar=1;
 
 extern QString prePath = ""; //安卓下的预路径 请在sdcard下自建MengDieOBJ梦蝶工程文件夹 将包放在该目录下
 
+
 Basic::Basic(QWidget *parent)
     : QWidget(parent)
 {
@@ -105,9 +106,9 @@ void Basic::setWindowSize(int w, int h)
     zoomVar = widthZoomVar*heightZoomVar;                   //计算面积比值
 }
 
-void Basic::setScene(Item *item)
+void Basic::setScene(Item &item)
 {
-    scene->addItem(item);
+    scene->addItem(&item);
     autoZoom(item);
 }
 
@@ -124,7 +125,8 @@ void Basic::setPrePath(QString path)
 void Basic::setFixed(bool s)
 {
     if(s == false){
-        
+        deskWidth = screenWindowWidth;
+        deskHeight = screenWindowHeight;
     }
     else{
         deskWidth = defaultWindowWidth;
@@ -138,13 +140,14 @@ QString Basic::getPrePath()
     return prePath;
 }
 
-void Basic::autoZoom(Item *item) //这个功能用人话讲就是你在电脑上360*640窗口大小下看到的UI啥样 不管到啥分辨率的手机上, UI都是那样
+void Basic::autoZoom(Item &item) //这个功能用人话讲就是你在PC上360*640窗口大小下看到的UI啥样 不管到啥分辨率的手机上, UI都是那样
 {
-    zoomVar = 1;//(deskWidth*deskHeight)/(defaultWindowWidth*defaultWindowHeight);    
-    item->setScale(zoomVar); 
-    int pixWidth = item->boundingRect().width();
-    int pixHeight = item->boundingRect().height();
-    item->move((pixWidth*zoomVar)/2 - pixWidth/2 + item->qx*zoomVar, pixHeight*zoomVar/2 - pixHeight/2 + item->qy*zoomVar);
-    //item->move(item->qx, item->qy);
+    int pixWidth = item.pix.width();
+    int pixHeight = item.pix.height();
+    item.pix = item.pix.scaled(pixWidth * (deskWidth/defaultWindowWidth),
+                               pixHeight * (deskHeight/defaultWindowHeight));
+                               //自适应, 原图长宽 * (当前可用屏幕大小 / 默认屏幕大小),
+    item.move(item.qx, item.qy);
+    
 }
 
